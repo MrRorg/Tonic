@@ -6,6 +6,8 @@ import Foundation
 /// We use abreviated descriptions with extensions seperated by underscores
 /// We don't like usiing underscores for enum cases any more than you do, however is a nice visual speration of extensions
 public enum ChordType: String, CaseIterable, Codable {
+    //MARK: - Power
+    case power
 
 	//MARK: - Triads
     /// Major Triad: Major Third, Perfect Fifth, e.g. `C`
@@ -131,6 +133,9 @@ public enum ChordType: String, CaseIterable, Codable {
 
     /// Six Over Nine: Major Third, Perfect Fifth, Major Sixth, Major Ninth, e.g. `C6/9`
     case maj_6_9
+    
+    /// Minor Six Over Nine: Minor Third, Perfect Fifth, Major Sixth, Major Ninth, e.g. `Cm6/9`
+    case min_6_9
     
     /// Augmented Major Ninth: Major Third, Augmented Fifth, Major Seventh, Major Nine, e.g. `Cmaj9(♯5)`
     case maj9_sharp5
@@ -551,7 +556,9 @@ public enum ChordType: String, CaseIterable, Codable {
 
     public var intervals: [Interval] {
         switch self {
-            case .major:                       
+            case .power:
+                return [.P5]
+            case .major:
                 return [.M3, .P5]
             case .minor:                       
                 return [.m3, .P5]
@@ -653,6 +660,8 @@ public enum ChordType: String, CaseIterable, Codable {
                 return [.M3, .A5, .A9]
             case .maj_6_9:
                 return [.M3, .P5, .M6, .M9]
+            case .min_6_9:
+                return [.m3, .P5, .M6, .M9]
             case .maj9_sharp5:
                 return [.M3, .A5, .M7, .M9]
             case .maj9_flat5:
@@ -913,6 +922,7 @@ extension ChordType: CustomStringConvertible {
     /// Adornment to the Root NoteClass (letter+accidental) that defines the chord type
     public var description: String {
         switch self {
+            case .power:                       return "5"
             case .major:                       return ""
             case .minor:                       return "m"
             case .dim:                         return "°"
@@ -948,13 +958,14 @@ extension ChordType: CustomStringConvertible {
             case .maj_add9:                    return "(add9)"
             case .min_add9:                    return "m(add9)"
             case .maj_6_9:                     return "6/9"
+            case .min_6_9:                     return "m6/9"
             case .maj9_flat5:                  return "maj9(♭5)"
             case .maj11:                       return "maj11"
             case .dom11:                       return "11"
             case .min11:                       return "m11"
             case .halfDim11:                   return "ø11"
             case .maj9_sharp11:                return "maj9(♯11)"
-            case .maj9_sharp5:                 return "maj9(♯5)(♯11)"
+            case .maj9_sharp5:                 return "maj9(♯5)"
             case .dom7_flat9_sharp11:          return "7(♭9)(♯11)"
             case .dom7_sharp9_sharp11:         return "7(♯9)(♯11)"
             case .min7_flat9_11:               return "m7(♭9)(11)"
@@ -1098,6 +1109,7 @@ extension ChordType: CustomStringConvertible {
     /// NotationExpress: https://www.notationcentral.com/product/norfolk-fonts-for-sibelius/
     public var chordFontDescription: String {
         switch self {
+            case .power:                       return "5"
             case .major:                       return ""
             case .minor:                       return "m"
             case .dim:                         return "º"
@@ -1133,6 +1145,7 @@ extension ChordType: CustomStringConvertible {
             case .maj_add9:                    return "@9"
             case .min_add9:                    return "m@9"
             case .maj_6_9:                     return "%"
+            case .min_6_9:                     return "m%"
             case .maj9_flat5:                  return "^9b5"
             case .maj11:                       return "^11"
             case .dom11:                       return "11"
