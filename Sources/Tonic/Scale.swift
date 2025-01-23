@@ -6,7 +6,7 @@ import Foundation
 public struct Scale: OptionSet, Hashable {
     public let rawValue: Int
 
-    public let description: String
+    public let scaleDescription: String
 
     public var intervals: [Interval] {
         var result: [Interval] = []
@@ -20,16 +20,22 @@ public struct Scale: OptionSet, Hashable {
 
     public init(rawValue: Int) {
         self.rawValue = rawValue
-        description = ""
+        scaleDescription = ""
     }
 
     public init(intervals: [Interval], description: String) {
-        self.description = description
+        self.scaleDescription = description
         var r = 0
         for interval in intervals {
             r |= (1 << interval.rawValue)
         }
         rawValue = r
+    }
+}
+
+extension Scale: CustomStringConvertible {
+    public var description: String {
+        scaleDescription
     }
 }
 
@@ -51,6 +57,6 @@ extension Scale: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(intervals, forKey: .intervals)
-        try container.encode(description, forKey: .scaleDescription)
+        try container.encode(scaleDescription, forKey: .scaleDescription)
     }
 }
