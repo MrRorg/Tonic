@@ -31,6 +31,11 @@ public struct Scale: OptionSet, Hashable {
         }
         rawValue = r
     }
+    
+    public init(rawValue: Int, description: String) {
+        self.rawValue = rawValue
+        self.scaleDescription = description
+    }
 }
 
 extension Scale: CustomStringConvertible {
@@ -49,14 +54,14 @@ extension Scale: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let intervals = try container.decode([Interval].self, forKey: .intervals)
+        let intervals = try container.decode(Int.self, forKey: .intervals)
         let description = try container.decode(String.self, forKey: .scaleDescription)
-        self = .init(intervals: intervals, description: description)
+        self = .init(rawValue: intervals, description: description)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(intervals, forKey: .intervals)
+        try container.encode(rawValue, forKey: .intervals)
         try container.encode(scaleDescription, forKey: .scaleDescription)
     }
 }
