@@ -54,11 +54,14 @@ extension Scale: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let intervals = try container.decode(Int.self, forKey: .intervals)
+//        let intervals = try container.decode(Int.self, forKey: .intervals)
+        let intervals = try container.decodeIfPresent(Int.self, forKey: .intervals)
         let description = try container.decode(String.self, forKey: .scaleDescription)
 //        self = .init(rawValue: intervals, description: description)
         
-        rawValue = intervals
+        
+        
+        rawValue = intervals ?? 0
         scaleDescription = description
     }
 
